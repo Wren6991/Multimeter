@@ -17005,7 +17005,6 @@ Source: 008-0260-0_E.pdf</description>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="IC3" library="microchip" deviceset="25*" device="SN" technology="C080"/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
-<part name="P+5" library="supply1" deviceset="VCC" device=""/>
 <part name="P+6" library="supply1" deviceset="VCC" device=""/>
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
 <part name="GND" library="supply1" deviceset="GND" device=""/>
@@ -17067,7 +17066,6 @@ Source: 008-0260-0_E.pdf</description>
 <part name="P+3" library="supply1" deviceset="VCC" device=""/>
 <part name="LED1" library="led" deviceset="LED" device="SML0805"/>
 <part name="R20" library="rcl" deviceset="R-EU_" device="R0805" value="500"/>
-<part name="P+10" library="supply1" deviceset="VCC" device=""/>
 <part name="R21" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R22" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R23" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
@@ -17119,7 +17117,6 @@ Source: 008-0260-0_E.pdf</description>
 <instance part="GND10" gate="1" x="167.64" y="68.58" rot="R180"/>
 <instance part="IC3" gate="G$1" x="180.34" y="12.7"/>
 <instance part="GND11" gate="1" x="187.96" y="0"/>
-<instance part="P+5" gate="VCC" x="187.96" y="27.94"/>
 <instance part="P+6" gate="VCC" x="152.4" y="66.04"/>
 <instance part="GND12" gate="1" x="152.4" y="45.72"/>
 <instance part="GND" gate="1" x="152.4" y="66.04"/>
@@ -17181,7 +17178,6 @@ Source: 008-0260-0_E.pdf</description>
 <instance part="P+3" gate="VCC" x="231.14" y="99.06"/>
 <instance part="LED1" gate="G$1" x="200.66" y="101.6" rot="R90"/>
 <instance part="R20" gate="G$1" x="193.04" y="101.6"/>
-<instance part="P+10" gate="VCC" x="187.96" y="104.14"/>
 <instance part="R21" gate="G$1" x="160.02" y="91.44"/>
 <instance part="R22" gate="G$1" x="160.02" y="93.98"/>
 <instance part="R23" gate="G$1" x="160.02" y="96.52"/>
@@ -17372,14 +17368,6 @@ Source: 008-0260-0_E.pdf</description>
 <wire x1="175.26" y1="63.5" x2="175.26" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="VCC"/>
-<pinref part="P+5" gate="VCC" pin="VCC"/>
-<pinref part="C3" gate="G$1" pin="1"/>
-<wire x1="198.12" y1="10.16" x2="198.12" y2="25.4" width="0.1524" layer="91"/>
-<wire x1="198.12" y1="25.4" x2="187.96" y2="25.4" width="0.1524" layer="91"/>
-<junction x="187.96" y="25.4"/>
-</segment>
-<segment>
 <pinref part="IC2" gate="G$1" pin="VCC2"/>
 <pinref part="IC2" gate="G$1" pin="VCC"/>
 <wire x1="152.4" y1="58.42" x2="152.4" y2="60.96" width="0.1524" layer="91"/>
@@ -17416,12 +17404,6 @@ Source: 008-0260-0_E.pdf</description>
 <segment>
 <pinref part="U$4" gate="G$1" pin="BAT"/>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
-</segment>
-<segment>
-<pinref part="R20" gate="G$1" pin="1"/>
-<pinref part="P+10" gate="VCC" pin="VCC"/>
-<pinref part="P+10" gate="VCC" pin="VCC"/>
-<junction x="187.96" y="101.6"/>
 </segment>
 </net>
 <net name="N$40" class="0">
@@ -17913,18 +17895,6 @@ Source: 008-0260-0_E.pdf</description>
 <label x="93.98" y="30.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="IRD_VCC" class="0">
-<segment>
-<pinref part="U$3" gate="G$1" pin="VCC"/>
-<wire x1="139.7" y1="-10.16" x2="134.62" y2="-10.16" width="0.1524" layer="91"/>
-<label x="121.92" y="-10.16" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC2" gate="G$1" pin="PC0(SCL)"/>
-<wire x1="111.76" y1="27.94" x2="106.68" y2="27.94" width="0.1524" layer="91"/>
-<label x="93.98" y="27.94" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$1" class="0">
 <segment>
 <pinref part="D5" gate="1" pin="A"/>
@@ -18013,12 +17983,18 @@ Source: 008-0260-0_E.pdf</description>
 <junction x="154.94" y="78.74"/>
 </segment>
 </net>
-<net name="N$19" class="0">
+<net name="DC_IN" class="0">
 <segment>
 <pinref part="ICSP" gate="1" pin="2"/>
 <pinref part="SJ1" gate="G$1" pin="2"/>
 <wire x1="180.34" y1="96.52" x2="195.58" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="195.58" y1="96.52" x2="195.58" y2="91.44" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="R20" gate="G$1" pin="1"/>
+<wire x1="187.96" y1="101.6" x2="185.42" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="101.6" x2="185.42" y2="109.22" width="0.1524" layer="91"/>
+<label x="185.42" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$20" class="0">
@@ -18079,6 +18055,26 @@ Source: 008-0260-0_E.pdf</description>
 <pinref part="IC2" gate="G$1" pin="AREF"/>
 <pinref part="C11" gate="G$1" pin="1"/>
 <wire x1="152.4" y1="73.66" x2="154.94" y2="73.66" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="AUX_VCC" class="0">
+<segment>
+<pinref part="IC2" gate="G$1" pin="PC0(SCL)"/>
+<wire x1="111.76" y1="27.94" x2="106.68" y2="27.94" width="0.1524" layer="91"/>
+<label x="93.98" y="27.94" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="G$1" pin="VCC"/>
+<pinref part="C3" gate="G$1" pin="1"/>
+<wire x1="198.12" y1="10.16" x2="198.12" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="25.4" x2="187.96" y2="25.4" width="0.1524" layer="91"/>
+<label x="187.96" y="30.48" size="1.778" layer="95"/>
+<wire x1="187.96" y1="25.4" x2="187.96" y2="30.48" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$3" gate="G$1" pin="VCC"/>
+<wire x1="139.7" y1="-10.16" x2="134.62" y2="-10.16" width="0.1524" layer="91"/>
+<label x="121.92" y="-10.16" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
