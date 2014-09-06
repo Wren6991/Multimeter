@@ -5,16 +5,10 @@
 #include <util/delay.h>
 #include <math.h>
 
-void set_vatten(uint8_t vatten)
-{
-    PORT_VATTEN &= ~VATTEN_ALL;
-    PORT_VATTEN |= vatten;
-}
-
 uint16_t get_adc_10bit_fast(uint8_t pin)
 {
     ADMUX = 0x40 | pin; // AREF = VCC
-    ADCSRA = 0x87;      // Enabled, clk/64 = 125kHz
+    ADCSRA = 0x85;      // Enabled, clk/64 = 125kHz
     ADCSRA |= 0x40;
     while (ADCSRA & 0x40);
     uint8_t result = ADCL;
@@ -96,7 +90,7 @@ float get_current()
 
 inline void set_rc_range(uint8_t range)
 {
-    uint8_t ranges[] = {RC_LOW, RC_MID, RC_HI};
+    uint8_t ranges[] = {RC_LOW, RC_MID, RC_HI, 0};
     DDR_RC &= ~(RC_LOW | RC_MID | RC_HI);
     PORT_RC &= ~(RC_LOW | RC_MID | RC_HI);
     DDR_RC |= ranges[range];
@@ -104,7 +98,7 @@ inline void set_rc_range(uint8_t range)
 }
 
 uint8_t cap_range = 2;
-uint8_t cap_aco_mask = 0x2;
+volatile uint8_t cap_aco_mask = 0x20;
 
 // Timer 1 overflow vector: stop the timer, set its result back to a large value,
 // jump up a range, and force the wait loop to exit.
@@ -190,5 +184,28 @@ float get_capacitance()
     // C = -t / (R * ln(1 - Vtrig / Vcc)
     float result = -((float)(TCNT1 - subtractors[cap_range]) / divisors[cap_range]) / (log(1 - 1.03f / (get_battery_voltage() * (1/256.f))) * (float)resistances[cap_range]);
     choose_cap_range(result);
+    return result;
+}
+
+uint8_t resistance_range = 1;
+
+float get_resistance()
+{
+    uint16_t r[] = {47, 500, 20000};
+    switch_current(CURRENT_OFF);
+    set_rc_range(resistance_range);
+    _delay_us(100);
+    uint16_t reading = 0;
+    for (uint8_t i = 4; i; --i)
+        reading += get_adc_12bit(VIN_RC);
+    set_rc_range(3);
+    float  result = reading * (1/16384.f);
+    result = r[resistance_range] * (result / (1.f - result));
+
+    if (resistance_range == 1 and result > 4000.f)
+        resistance_range++;
+    else if (resistance_range == 2 and result < 3000.f)
+        resistance_range--;
+
     return result;
 }

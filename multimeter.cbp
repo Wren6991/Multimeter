@@ -33,6 +33,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-mmcu=atmega324pa" />
+			<Add option="-lm" />
 			<Add option="-DF_CPU=8000000UL" />
 		</Compiler>
 		<Linker>
@@ -56,8 +57,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="measurement.cpp" />
+		<Unit filename="measurement.h" />
+		<Unit filename="pins.h" />
 		<Unit filename="screen.cpp" />
 		<Unit filename="screen.h" />
+		<Unit filename="util.cpp" />
+		<Unit filename="util.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

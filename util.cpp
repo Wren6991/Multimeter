@@ -4,6 +4,8 @@
 
 bool button_isdown(button_t button)
 {
+    DDRD &= ~button;
+    PORTD |= button;
     return !(PIND & button);
 }
 
