@@ -53,15 +53,22 @@
 			<Add after='&quot;C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude&quot; -q  -C&quot;C:\Program Files (x86)\Arduino\hardware\tools\avr/etc/avrdude.conf&quot; -pm324pa -cstk500v1 -P\\.\COM7 -b19200 -Uflash:w:bin\Release\multimeter.hex:i' />
 			<Mode after="always" />
 		</ExtraCommands>
+		<Unit filename="font_35.inc" />
+		<Unit filename="font_88.inc" />
+		<Unit filename="font_digits.inc" />
 		<Unit filename="fuse.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="logiccapture.S" />
 		<Unit filename="main.cpp" />
 		<Unit filename="measurement.cpp" />
 		<Unit filename="measurement.h" />
+		<Unit filename="oscilloscope.S" />
 		<Unit filename="pins.h" />
 		<Unit filename="screen.cpp" />
 		<Unit filename="screen.h" />
+		<Unit filename="spi.cpp" />
+		<Unit filename="spi.h" />
 		<Unit filename="util.cpp" />
 		<Unit filename="util.h" />
 		<Extensions>

@@ -9,97 +9,84 @@
 
 extern uint8_t resistance_range;
 
+extern "C" void logic_acquire_fast(uint8_t* address, uint16_t count);
+extern "C" void oscilloscope_fast(uint8_t* address, uint16_t count);
+
+void draw_top_bar()
+{
+    scrn_print("\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004", 0, 0);
+    uint16_t battery = get_battery_voltage();
+    if (battery < (uint16_t)(3.6 * 256))
+        scrn_print("\010\011", 76, 0);
+    else if (battery < (uint16_t)(3.8 * 256))
+        scrn_print("\012\013", 76, 0);
+    else if (battery < (uint16_t)(4.0 * 256))
+        scrn_print("\014\015", 76, 0);
+    else
+        scrn_print("\016\017", 76, 0);
+    scrn_print(fxp88toa(battery), 67, 1);
+}
+
+void draw_digit_screen(const char *param_type, float value, const char *unit)
+{
+    scrn_clear();
+    draw_top_bar();
+    scrn_print(param_type, 0, 1);
+    scrn_print_digits(ftoa(value), 0, 2);
+    scrn_print_digits(unit, 64, 2);
+    scrn_print("Megameter   Luke Wren", 0, 5);
+
+}
 
 int main()
 {
     switch_current(CURRENT_ON);
-    spi_init();
-    scrn_wake();
+    scrn_backlight(true);
+    scrn_init();
+    button_isdown(BTN_DOWN);    // forces button setup code to run
     uint8_t func = 0;
     while (true)
     {
         switch (func)
         {
         case 0:
-            scrn_clear();
-            scrn_print("Voltage");
-            scrn_cursorpos(0, 1);
-            scrn_print(ftoa(get_voltage()));
-            scrn_print("V");
-            _delay_ms(300);
+            draw_digit_screen("Voltage", get_voltage(), "V");
             break;
         case 1:
-            scrn_clear();
-            scrn_print("Current");
-            scrn_cursorpos(0, 1);
-            scrn_print(ftoa(get_current()));
-            scrn_print("A");
-            _delay_ms(300);
+            draw_digit_screen("Current", get_current(), "A");
             break;
         case 2: {
             float cap = get_capacitance();
-            scrn_clear();
-            scrn_print("Capacitance ");
-            scrn_cursorpos(0, 1);
             if (cap < 1.f)
-            {
-                scrn_print(ftoa(cap * 1000.f));
-                scrn_print("nF");
-            }
+                draw_digit_screen("Capacitance", cap * 1000.f, "nF");
             else
-            {
-                scrn_print(ftoa(cap));
-                scrn_print("\344F");
-            }
-            _delay_ms(300);
+                draw_digit_screen("Capacitance", cap, "uF");
             break;}
         case 3:
-            scrn_clear();
-            scrn_print("Resistance");
-            scrn_cursorpos(0, 1);
             {
                 float resistance = get_resistance();
                 if (resistance > 1000000.f)
                 {
-                    scrn_print(ftoa(get_resistance() * 0.000001f));
-                    scrn_print("M\364");
+                    draw_digit_screen("Resistance", resistance * 0.000001f, "MO");
                 }
                 else if (resistance > 1000.f)
                 {
-                    scrn_print(ftoa(get_resistance() * 0.001f));
-                    scrn_print("k\364");
+                    draw_digit_screen("Resistance", resistance * 0.001f, "kO");
                 }
                 else
                 {
-                    scrn_print(ftoa(get_resistance()));
-                    scrn_print("\364");
+                    draw_digit_screen("Resistance", resistance, "O");
                 }
 
             }
-
-            scrn_cursorpos(14, 1);
-            scrn_print(itoa(resistance_range));
-            _delay_ms(300);
             break;
         }
+        _delay_ms(250);
 
         if (button_isdown(BTN_UP))
             func = (func + 1) & 0x03;
         if (button_isdown(BTN_DOWN))
             func = (func - 1) & 0x03;
-
-        spi_assert(spi_assert_flash);
-        uint8_t x = 0;
-        while (1)
-        {
-            for (uint8_t i = 8; i; --i)
-                x = (x << 1) | ((uint8_t)get_adc_10bit_fast(0x0a) & 0x01);
-             spi_send_byte(x);
-        }
-
-        spi_deassert();
-
-
     }
 }
 

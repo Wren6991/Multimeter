@@ -25,7 +25,7 @@ uint16_t get_battery_voltage()
     {
         result += get_adc_10bit_fast(VIN_BANDGAP);
     }
-    return 4538487 / result;   // = 1024 (number of ADC steps) * 1.1 (bandgap voltage) * 16 (number of readings) * 256 (fxp88 fixed point)
+    return 4464085 / result;   // = 1024 (number of ADC steps) * 1.1 (bandgap voltage) * 16 (number of readings) * 256 (fxp88 fixed point)
 }
 
 uint16_t get_adc_12bit(uint8_t pin)
@@ -36,6 +36,12 @@ uint16_t get_adc_12bit(uint8_t pin)
         result += get_adc_10bit_fast(pin);
     }
     return result >> 2;
+}
+
+void set_vatten(uint8_t vatten)
+{
+    DDR_VATTEN |= VATTEN_ALL;
+    PORT_VATTEN = (PORT_VATTEN & ~VATTEN_ALL) | vatten;
 }
 
 uint8_t voltage_range = 0;

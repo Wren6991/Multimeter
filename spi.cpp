@@ -21,7 +21,7 @@ void spi_init()
 {
     spi_deassert();
     DDR_SPI = (DDR_SPI & ~SPI_ALL) | (SPI_MOSI | SPI_SCK | SPI_SS);
-    SPCR0 = 0x51;    // no interrupt, SPI enabled, MSB first, master, divide clock by four (on top of four phases)
+    SPCR0 = 0x50;    // no interrupt, SPI enabled, MSB first, master, divide clock by four (on top of four phases)
     SPSR0 = 0x01;    // SPI2X enabled (gives effective SPI clock of FCPU/8 = 1MHz)
 }
 
